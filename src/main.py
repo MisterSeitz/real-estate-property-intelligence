@@ -124,12 +124,12 @@ async def processor(state: State):
     )
     
     # Output & Sync
-    await Actor.push_data([record.model_dump(by_alias=True)])
+    await Actor.push_data([record.model_dump(by_alias=False, exclude_none=True)])
     # Sync is now a direct record sync to the specified table
     sync_to_supabase(record)
     
     if config.discordWebhookUrl:
-        send_discord_alert(config.discordWebhookUrl, record.model_dump(by_alias=True), config.runTestMode)
+        send_discord_alert(config.discordWebhookUrl, record.model_dump(by_alias=False, exclude_none=True), config.runTestMode)
     
     return {"processed_count": idx + 1}
 
