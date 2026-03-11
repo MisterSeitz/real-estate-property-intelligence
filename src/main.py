@@ -140,24 +140,18 @@ def should_continue(state: State):
 async def main():
     async with Actor:
         raw_input = await Actor.get_input() or {}
+        admin_mode = raw_input.get("adminMode", False)
         run_mode = raw_input.get("runMode", "SEARCH_ARTICLES")
 
         url = os.getenv("SUPABASE_URL") or os.getenv("NEXT_PUBLIC_SUPABASE_URL")
         key = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
         supabase = create_client(url, key) if (url and key) else None
 
-        # 1. MAINTENANCE MODE 
-        if run_mode == "MAINTENANCE":
-            Actor.log.info("🏠 Running Real Estate Maintenance...")
-            from .services.maintenance import run_daily_maintenance
-            await run_daily_maintenance()
-            await Actor.set_status_message("Maintenance Complete")
+        # ── ADMIN PATH: Scrape feeds and sync to DB ──────────────────────────
+        if admin_mode:
+            Actor.log.info("🏠 [ADMIN] Running Daily Property Intelligence Update...")
 
-        # 2. DAILY UPDATE (Admin: scrape property news, push to DB)
-        elif run_mode == "DAILY_UPDATE":
-            Actor.log.info("🏠 Running Daily Property Update...")
-            
-            Actor.log.info("🧠 Starting Property INTELLIGENCE scraping...")
+            # Run the LangGraph scraping pipeline
             graph = StateGraph(State)
             graph.add_node("init", load_config)
             graph.add_node("fetch", fetch_step)
@@ -167,45 +161,49 @@ async def main():
             graph.add_edge("fetch", "process")
             graph.add_conditional_edges("process", should_continue, {"continue": "process", "end": "__end__"})
             app = graph.compile()
-            limit = raw_input.get("maxArticles", 20) + 15
+            limit = raw_input.get("maxArticles", 50) + 15
             await app.ainvoke({"config": None, "queue": [], "processed_count": 0}, config={"recursion_limit": limit})
-            await Actor.set_status_message("Daily Property Update Complete")
 
-        # 3. PROPERTY REPORT MODE (Monetized)
+            # Run maintenance risk signal calculations
+            from .services.maintenance import run_daily_maintenance
+            await run_daily_maintenance()
+
+            await Actor.set_status_message("✅ Daily Property Update Complete")
+
+        # ── USER PATH: Monetized data retrieval ──────────────────────────────
         elif run_mode == "PROPERTY_REPORT":
+            Actor.log.info("📊 Generating Property Report...")
             if not raw_input.get("runTestMode"):
                 charge_res = await Actor.charge(event_name="report-generated")
                 if charge_res and getattr(charge_res, "eventChargeLimitReached", False):
                     await Actor.fail("User charge limit reached.")
                     return
+            from .services.reporting import generate_property_report
             await generate_property_report()
             await Actor.set_status_message("Property Report Generated")
 
-        # 4. SEARCH ARTICLES FROM DB (Monetized)
-        elif run_mode == "SEARCH_ARTICLES":
+        else:  # Default: SEARCH_ARTICLES
             Actor.log.info("🔍 Querying Property Articles from DB...")
             if not supabase:
                 await Actor.fail("Supabase credentials missing.")
                 return
-            
+
             query = supabase.schema("ai_intelligence").table("real_estate").select("*")
             if raw_input.get("startDate"):
                 query = query.gte("created_at", raw_input.get("startDate"))
             if raw_input.get("searchQuery"):
                 q = raw_input.get("searchQuery")
-                # Search across title, summary, and locations
                 query = query.or_(f"title.ilike.%{q}%,ai_summary.ilike.%{q}%,locations.cs.{{ \"{q}\" }}")
-                
+
             res = query.order("created_at", desc=True).limit(raw_input.get("maxArticles", 20)).execute()
-            
+
             if res.data:
-                reformatted_data = res.data
                 if not raw_input.get("runTestMode"):
-                    charge_res = await Actor.charge(event_name="article-summary", count=len(reformatted_data))
+                    charge_res = await Actor.charge(event_name="article-summary", count=len(res.data))
                     if charge_res and getattr(charge_res, "eventChargeLimitReached", False):
                         await Actor.fail("User charge limit reached.")
                         return
-                await Actor.push_data(reformatted_data)
+                await Actor.push_data(res.data)
             await Actor.set_status_message(f"Returned {len(res.data) if res.data else 0} articles")
 
 if __name__ == "__main__":

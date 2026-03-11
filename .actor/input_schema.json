@@ -83,26 +83,28 @@
             "sectionDescription": "Get alerted when market-moving news is detected.",
             "prefill": ""
         },
+        "adminMode": {
+            "title": "⚙️ Admin Mode",
+            "type": "boolean",
+            "description": "Trigger background data scraping and DB updates. (Hidden from non-admin users)",
+            "default": false,
+            "isSecret": true,
+            "sectionCaption": "🛠️ System Configuration"
+        },
         "runMode": {
             "title": "⚙️ Operation Mode",
             "type": "string",
             "editor": "select",
             "enum": [
                 "SEARCH_ARTICLES",
-                "DAILY_UPDATE",
-                "MAINTENANCE",
                 "PROPERTY_REPORT"
             ],
             "enumTitles": [
                 "🔍 QUERY: Property Articles (Monetized)",
-                "⚙️ ADMIN: Daily Update (Scrapes News + Metrics)",
-                "⚙️ ADMIN: Maintenance (Risk Signals)",
-                "⚙️ ADMIN: Generate Property Report"
+                "📊 REPORT: Market Summary (Monetized)"
             ],
             "default": "SEARCH_ARTICLES",
-            "description": "<b>SEARCH_ARTICLES:</b> Search and retrieve analyzed news from the database.<br><b>DAILY_UPDATE:</b> Scheduled admin task to scrape articles.<br><b>PROPERTY_REPORT:</b> Generates a market summary.",
-            "sectionCaption": "🛠️ System & Admin",
-            "sectionDescription": "Decide what this execution run will accomplish.",
+            "description": "<b>SEARCH_ARTICLES:</b> Search and retrieve analyzed news from the database.<br><b>PROPERTY_REPORT:</b> Generates a high-level market summary.",
             "prefill": "SEARCH_ARTICLES"
         },
         "searchQuery": {
@@ -129,7 +131,6 @@
     },
     "required": [
         "source",
-        "maxArticles",
-        "runMode"
+        "maxArticles"
     ]
 }
