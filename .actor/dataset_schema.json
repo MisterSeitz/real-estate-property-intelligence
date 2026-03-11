@@ -102,8 +102,17 @@
                 "items": { "type": "string" }, 
                 "title": "Companies" 
             },
+            "statistics": { 
+                "type": "array", 
+                "items": { "type": "string" }, 
+                "title": "Statistics" 
+            },
             "category": { "type": "string", "title": "Category" },
-            "data_source_method": { "type": "string", "title": "Scraping Method" }
+            "image_url": { "type": "string", "title": "Image URL" },
+            "data_source_method": { "type": "string", "title": "Scraping Method" },
+            "markdown_content": { "type": "string", "title": "Full Content" },
+            "content_type": { "type": "string", "title": "Content Type" },
+            "raw_context_source": { "type": "string", "title": "Raw Context" }
         }
     }
 }
