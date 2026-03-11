@@ -204,7 +204,7 @@ async def main():
 
             if res.data:
                 if not raw_input.get("runTestMode"):
-                    charge_res = await Actor.charge(event_name="article-summary", count=len(res.data))
+                    charge_res = await Actor.charge(event_name="analyze_article_summary", count=len(res.data))
                     if charge_res and getattr(charge_res, "eventChargeLimitReached", False):
                         await Actor.fail("User charge limit reached.")
                         return

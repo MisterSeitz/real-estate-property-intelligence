@@ -29,7 +29,7 @@ The Actor is scheduled to run on the Apify platform in `DAILY_UPDATE` run mode p
 ## 2. User-Facing Operations (Monetized APIs)
 Users are isolated from the raw scraping layer. They interact via predefined database query endpoints using a **Pay-Per-Event (PPE)** monetization model.
 
-*   **`SEARCH_ARTICLES`**: Uses Supabase querying to fetch AI-annotated text records matching custom `searchQuery` and `startDate` constraints. Charges the `article-summary` event.
+*   **`SEARCH_ARTICLES`**: Uses Supabase querying to fetch AI-annotated text records matching custom `searchQuery` and `startDate` constraints. Charges the `analyze_article_summary` event.
 *   **`PROPERTY_REPORT`**: Generates an aggregated market summary combining current metrics with news sentiment. Charges the `report-generated` event.
 
 ## 3. Database Schema Overview (Supabase Postgres)
