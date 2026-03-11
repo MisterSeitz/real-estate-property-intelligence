@@ -140,7 +140,8 @@ def should_continue(state: State):
 async def main():
     async with Actor:
         raw_input = await Actor.get_input() or {}
-        admin_mode = raw_input.get("adminMode", False)
+        admin_input = raw_input.get("adminMode", False)
+        admin_mode = str(admin_input).strip().lower() == "true"
         run_mode = raw_input.get("runMode", "SEARCH_ARTICLES")
 
         url = os.getenv("SUPABASE_URL") or os.getenv("NEXT_PUBLIC_SUPABASE_URL")
