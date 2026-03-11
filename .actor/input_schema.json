@@ -4,93 +4,6 @@
     "schemaVersion": 1,
     "type": "object",
     "properties": {
-        "source": {
-            "title": "📡 Property Category",
-            "type": "string",
-            "editor": "select",
-            "enum": [
-                "all",
-                "Major News",
-                "Market Data",
-                "Luxury & Niche",
-                "PropTech & Trends",
-                "International",
-                "custom"
-            ],
-            "enumTitles": [
-                "🌍 All Categories (Smart Mix)",
-                "📰 Major News (Realtor, HousingWire)",
-                "📊 Market Data (WPJ, BiggerPockets)",
-                "💎 Luxury & Niche (Sothebys, RealDeal)",
-                "🤖 PropTech & Trends (GeekEstate)",
-                "🇬🇧 International (Property Week)",
-                "🧩 Custom URL"
-            ],
-            "default": "all",
-            "description": "Select the property sector to monitor. Use 'All' for a broad overview.",
-            "sectionCaption": "🧠 Intelligence Configuration",
-            "sectionDescription": "Configure what data the AI should analyze.",
-            "prefill": "Major News"
-        },
-        "country": {
-            "title": "📍 Region Focus",
-            "type": "string",
-            "editor": "select",
-            "enum": [
-                "ALL",
-                "US",
-                "GB",
-                "CN",
-                "JP",
-                "DE"
-            ],
-            "enumTitles": [
-                "🌍 Global",
-                "🇺🇸 United States",
-                "🇬🇧 United Kingdom",
-                "🇨🇳 China",
-                "🇯🇵 Japan",
-                "🇩🇪 Germany"
-            ],
-            "default": "ALL",
-            "description": "Select a region to bias the search context and fallback mechanisms.",
-            "prefill": "ALL"
-        },
-        "customFeedUrl": {
-            "title": "🔗 Custom RSS Link",
-            "type": "string",
-            "editor": "textfield",
-            "description": "Paste a valid RSS URL here. ⚠️ Only used if 'News Category' is set to 'Custom URL'.",
-            "prefill": ""
-        },
-        "maxArticles": {
-            "title": "🔢 Max Articles",
-            "type": "integer",
-            "editor": "number",
-            "description": "Limit the number of articles to process to control costs and speed.",
-            "default": 20,
-            "minimum": 1,
-            "maximum": 100,
-            "prefill": 20
-        },
-        "discordWebhookUrl": {
-            "title": "🔔 Discord Webhook URL",
-            "type": "string",
-            "editor": "textfield",
-            "description": "Paste a Discord Webhook URL to receive real-time alerts for high-impact news (>60 score).",
-            "isSecret": true,
-            "sectionCaption": "📢 Notifications",
-            "sectionDescription": "Get alerted when market-moving news is detected.",
-            "prefill": ""
-        },
-        "adminMode": {
-            "title": "⚙️ Admin Mode",
-            "type": "string",
-            "editor": "textfield",
-            "description": "Trigger background data scraping and DB updates. Type 'true' here to run as admin.",
-            "isSecret": true,
-            "sectionCaption": "🛠️ System Configuration"
-        },
         "runMode": {
             "title": "⚙️ Operation Mode",
             "type": "string",
@@ -105,7 +18,19 @@
             ],
             "default": "SEARCH_ARTICLES",
             "description": "<b>SEARCH_ARTICLES:</b> Search and retrieve analyzed news from the database.<br><b>PROPERTY_REPORT:</b> Generates a high-level market summary.",
+            "sectionCaption": "🧠 Intelligence Configuration",
+            "sectionDescription": "Configure what data the AI should analyze.",
             "prefill": "SEARCH_ARTICLES"
+        },
+        "maxArticles": {
+            "title": "🔢 Max Articles",
+            "type": "integer",
+            "editor": "number",
+            "description": "Limit the number of articles to process to control costs and speed.",
+            "default": 20,
+            "minimum": 1,
+            "maximum": 100,
+            "prefill": 20
         },
         "searchQuery": {
             "title": "🔍 Search Term",
@@ -121,16 +46,52 @@
             "description": "Optional: Only return results on or after this date (Format: YYYY-MM-DD)",
             "prefill": ""
         },
+        "discordWebhookUrl": {
+            "title": "🔔 Discord Webhook URL",
+            "type": "string",
+            "editor": "textfield",
+            "description": "Paste a Discord Webhook URL to receive real-time alerts for high-impact news (>60 score).",
+            "isSecret": true,
+            "sectionCaption": "📢 Notifications",
+            "sectionDescription": "Get alerted when market-moving news is detected.",
+            "prefill": ""
+        },
+        "adminMode": {
+            "title": "⚙️ Admin Mode",
+            "type": "boolean",
+            "description": "When enabled, scrapes fresh news feeds and syncs results to the database. Intended for scheduled internal runs only.",
+            "editor": "hidden",
+            "default": false
+        },
+        "source": {
+            "title": "📡 News Category (Admin Only)",
+            "type": "string",
+            "editor": "hidden",
+            "default": "all",
+            "description": "Select the retail sector to monitor. Only used when Admin Mode is enabled."
+        },
+        "country": {
+            "title": "📍 Region Focus (Admin Only)",
+            "type": "string",
+            "editor": "hidden",
+            "default": "ALL",
+            "description": "Select a region to bias the search context. Only used when Admin Mode is enabled."
+        },
+        "customFeedUrl": {
+            "title": "🔗 Custom RSS Link (Admin Only)",
+            "type": "string",
+            "editor": "hidden",
+            "description": "Paste a valid RSS URL here. Only used if News Category is set to 'Custom URL' and Admin Mode is enabled."
+        },
         "runTestMode": {
             "title": "🧪 Test / QA Mode",
             "type": "boolean",
-            "description": "Enable this to run a fast system check without using AI credits (returns dummy data).",
-            "default": false,
-            "prefill": false
+            "description": "Enable to run a fast system check without using AI credits (returns dummy data). Admin Mode only.",
+            "editor": "hidden",
+            "default": false
         }
     },
     "required": [
-        "source",
         "maxArticles"
     ]
 }
