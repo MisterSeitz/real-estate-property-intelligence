@@ -21,7 +21,7 @@ async def generate_property_report():
     try:
         # 1. Recent Property Trends (Headlines)
         trends_res = supabase.schema("ai_intelligence").table("real_estate")\
-            .select("title, ai_summary, sentiment, market_dynamic")\
+            .select("title, ai_summary, sentiment, market_dynamic, impact_score, entities, risk_factors")\
             .order("created_at", desc=True).limit(5).execute()
         report["recent_trends"] = trends_res.data
 

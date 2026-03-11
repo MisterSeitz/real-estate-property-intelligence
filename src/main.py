@@ -49,7 +49,9 @@ def sync_to_supabase(record: DatasetRecord):
         "raw_context_source": record.raw_context_source,
         "entities": record.entities,
         "risk_factors": record.risk_factors,
-        "impact_score": record.impact_score
+        "impact_score": record.impact_score,
+        "markdown_content": record.markdown_content,
+        "content_type": record.content_type
     }
 
     try:

@@ -25,7 +25,7 @@ async def run_daily_maintenance():
         today_str = date.today().isoformat()
         # Fetch news from the last 24h
         response = supabase.schema("ai_intelligence").table("real_estate")\
-            .select("sentiment, market_dynamic, title")\
+            .select("sentiment, market_dynamic, title, risk_factors, impact_score")\
             .order("created_at", desc=True).limit(100).execute()
             
         articles = response.data
@@ -34,18 +34,25 @@ async def run_daily_maintenance():
         market_cooling_flag = False
         
         if articles:
-            # A. Sentiment Score (-1 to 1)
+            # A. Sentiment Score (-1 to 1) - Weighted by Impact
             score_map = {"Bullish": 1, "Bearish": -1, "Neutral": 0}
-            total_sent = sum(score_map.get(a.get('sentiment'), 0) for a in articles)
-            sentiment_score = round(total_sent / len(articles), 3)
+            total_sent = 0
+            total_weight = 0
+            for a in articles:
+                weight = a.get('impact_score', 5)
+                total_sent += score_map.get(a.get('sentiment'), 0) * weight
+                total_weight += weight
             
-            # B. Property Risk Keywords
+            sentiment_score = round(total_sent / total_weight, 3) if total_weight else 0
+            
+            # B. Property Risk Keywords + Extracted Risk Factors
             risk_keywords = ['bubble', 'crash', 'cooling', 'downturn', 'foreclosure', 'eviction', 'default', 'interest rate hike']
             risk_hits = 0
             for a in articles:
                 text = (a.get('title') or "").lower()
                 dynamic = (a.get('market_dynamic') or "").lower()
-                if any(w in text for w in risk_keywords) or any(w in dynamic for w in risk_keywords):
+                risks = a.get('risk_factors', []) or []
+                if any(w in text for w in risk_keywords) or any(w in dynamic for w in risk_keywords) or (len(risks) > 0):
                     risk_hits += 1
             
             # Simple risk mapping
