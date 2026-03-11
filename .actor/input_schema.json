@@ -1,0 +1,135 @@
+{
+    "title": "🏠 Real Estate & Property Intelligence Engine",
+    "description": "🚀 <b>Turn property news into actionable intelligence.</b><br><br>This Actor scrapes top real estate sources, analyzes sentiment using AI, and detects market-moving property events.<br><br><b>Quick Start:</b> Select a <b>Property Category</b> and click Start. The results will appear in the Dataset tab.<br>📚 <a href='https://github.com/MisterSeitz/real-estate-property-intelligence' target='_blank'>View Documentation</a>",
+    "schemaVersion": 1,
+    "type": "object",
+    "properties": {
+        "source": {
+            "title": "📡 Property Category",
+            "type": "string",
+            "editor": "select",
+            "enum": [
+                "all",
+                "Major News",
+                "Market Data",
+                "Luxury & Niche",
+                "PropTech & Trends",
+                "International",
+                "custom"
+            ],
+            "enumTitles": [
+                "🌍 All Categories (Smart Mix)",
+                "📰 Major News (Realtor, HousingWire)",
+                "📊 Market Data (WPJ, BiggerPockets)",
+                "💎 Luxury & Niche (Sothebys, RealDeal)",
+                "🤖 PropTech & Trends (GeekEstate)",
+                "🇬🇧 International (Property Week)",
+                "🧩 Custom URL"
+            ],
+            "default": "all",
+            "description": "Select the property sector to monitor. Use 'All' for a broad overview.",
+            "sectionCaption": "🧠 Intelligence Configuration",
+            "sectionDescription": "Configure what data the AI should analyze.",
+            "prefill": "Major News"
+        },
+        "country": {
+            "title": "📍 Region Focus",
+            "type": "string",
+            "editor": "select",
+            "enum": [
+                "ALL",
+                "US",
+                "GB",
+                "CN",
+                "JP",
+                "DE"
+            ],
+            "enumTitles": [
+                "🌍 Global",
+                "🇺🇸 United States",
+                "🇬🇧 United Kingdom",
+                "🇨🇳 China",
+                "🇯🇵 Japan",
+                "🇩🇪 Germany"
+            ],
+            "default": "ALL",
+            "description": "Select a region to bias the search context and fallback mechanisms.",
+            "prefill": "ALL"
+        },
+        "customFeedUrl": {
+            "title": "🔗 Custom RSS Link",
+            "type": "string",
+            "editor": "textfield",
+            "description": "Paste a valid RSS URL here. ⚠️ Only used if 'News Category' is set to 'Custom URL'.",
+            "prefill": ""
+        },
+        "maxArticles": {
+            "title": "🔢 Max Articles",
+            "type": "integer",
+            "editor": "number",
+            "description": "Limit the number of articles to process to control costs and speed.",
+            "default": 20,
+            "minimum": 1,
+            "maximum": 100,
+            "prefill": 20
+        },
+        "discordWebhookUrl": {
+            "title": "🔔 Discord Webhook URL",
+            "type": "string",
+            "editor": "textfield",
+            "description": "Paste a Discord Webhook URL to receive real-time alerts for high-impact news (>60 score).",
+            "isSecret": true,
+            "sectionCaption": "📢 Notifications",
+            "sectionDescription": "Get alerted when market-moving news is detected.",
+            "prefill": ""
+        },
+        "runMode": {
+            "title": "⚙️ Operation Mode",
+            "type": "string",
+            "editor": "select",
+            "enum": [
+                "SEARCH_ARTICLES",
+                "DAILY_UPDATE",
+                "MAINTENANCE",
+                "PROPERTY_REPORT"
+            ],
+            "enumTitles": [
+                "🔍 QUERY: Property Articles (Monetized)",
+                "⚙️ ADMIN: Daily Update (Scrapes News + Metrics)",
+                "⚙️ ADMIN: Maintenance (Risk Signals)",
+                "⚙️ ADMIN: Generate Property Report"
+            ],
+            "default": "SEARCH_ARTICLES",
+            "description": "<b>SEARCH_ARTICLES:</b> Search and retrieve analyzed news from the database.<br><b>DAILY_UPDATE:</b> Scheduled admin task to scrape articles.<br><b>PROPERTY_REPORT:</b> Generates a market summary.",
+            "sectionCaption": "🛠️ System & Admin",
+            "sectionDescription": "Decide what this execution run will accomplish.",
+            "prefill": "SEARCH_ARTICLES"
+        },
+        "searchQuery": {
+            "title": "🔍 Search Term",
+            "type": "string",
+            "editor": "textfield",
+            "description": "Optional keyword search for News.",
+            "prefill": ""
+        },
+        "startDate": {
+            "title": "📅 Start Date",
+            "type": "string",
+            "editor": "textfield",
+            "description": "Optional: Only return results on or after this date (Format: YYYY-MM-DD)",
+            "prefill": ""
+        },
+        "runTestMode": {
+            "title": "🧪 Test / QA Mode",
+            "type": "boolean",
+            "description": "Enable this to run a fast system check without using AI credits (returns dummy data).",
+            "default": false,
+            "prefill": false
+        }
+    },
+    "required": [
+        "source",
+        "maxArticles",
+        "runMode"
+    ]
+}

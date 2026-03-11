@@ -1,0 +1,28 @@
+{
+  "actorSpecification": 1,
+  "name": "global-markets-intelligence-pipeline",
+  "title": "💰 Global Markets Intelligence Pipeline",
+  "description": "This Apify Actor processes financial and market news from top sources and generates structured intelligence using **DuckDuckGo Search** for grounding and **OpenAI LLM** analysis. Prioritizes source diversity by cycling through feeds within a selected category.",
+  "version": "0.3",
+  "dockerfile": "./Dockerfile",
+  "entrypoint": "python -m src.main",
+  "input": "./input_schema.json",
+  "output": "./output_schema.json",
+  "storages": {
+    "dataset": "./dataset_schema.json"
+    },
+  "buildTag": "latest",
+  "actorRunInputExample": {
+    "source": "Index/Market Data",
+    "maxArticles": 20,
+    "runTestMode": false
+  },
+  "authors": [
+    {
+      "name": "Visita AI & Automation",
+      "url": "https://www.visita.co.za"
+    }
+  ],
+  "categories": ["News", "Finance", "Markets", "RSS", "AI Summarization", "Analytics"],
+  "isPublic": true
+}

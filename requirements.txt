@@ -1,0 +1,12 @@
+apify
+apify-client
+langgraph
+openai
+beautifulsoup4
+feedparser
+pydantic
+requests
+supabase
+python-dotenv
+yfinance
+pandas

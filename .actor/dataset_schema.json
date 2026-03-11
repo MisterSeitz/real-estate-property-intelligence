@@ -1,0 +1,109 @@
+{
+    "actorSpecification": 1,
+    "views": {
+        "intelligence": {
+            "title": "🏠 Real Estate Intelligence",
+            "transformation": {
+                "fields": [
+                    "published", 
+                    "property_type", 
+                    "listing_price", 
+                    "market_status", 
+                    "sentiment", 
+                    "locations", 
+                    "title", 
+                    "ai_summary", 
+                    "source_feed", 
+                    "category",
+                    "url"
+                ],
+                "flatten": ["locations", "companies", "statistics"]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "published": { 
+                        "label": "Date", 
+                        "format": "text",
+                        "width": 120
+                    },
+                    "property_type": { 
+                        "label": "Type", 
+                        "format": "text",
+                        "width": 100
+                    },
+                    "listing_price": { 
+                        "label": "Price", 
+                        "format": "text",
+                        "width": 100
+                    },
+                    "market_status": { 
+                        "label": "Status", 
+                        "format": "text",
+                        "width": 100
+                    },
+                    "sentiment": { 
+                        "label": "AI Sentiment", 
+                        "format": "text",
+                        "width": 100
+                    },
+                    "locations": { 
+                        "label": "Locations", 
+                        "format": "array",
+                        "width": 150
+                    },
+                    "title": { 
+                        "label": "Headline", 
+                        "format": "text",
+                        "width": 300
+                    },
+                    "ai_summary": { 
+                        "label": "AI Summary", 
+                        "format": "text",
+                        "width": 400
+                    },
+                    "source_feed": { 
+                        "label": "Source", 
+                        "format": "text" 
+                    },
+                    "category": { 
+                        "label": "Category", 
+                        "format": "text" 
+                    },
+                    "url": { 
+                        "label": "Read Article", 
+                        "format": "link" 
+                    }
+                }
+            }
+        }
+    },
+    "fields": {
+        "type": "object",
+        "properties": {
+            "title": { "type": "string", "title": "Headline" },
+            "url": { "type": "string", "format": "uri", "title": "Link" },
+            "published": { "type": "string", "title": "Published At" },
+            "source_feed": { "type": "string", "title": "Source Feed" },
+            "ai_summary": { "type": "string", "title": "AI Summary" },
+            "sentiment": { "type": "string", "title": "Sentiment" },
+            "market_dynamic": { "type": "string", "title": "Market Dynamic" },
+            "property_type": { "type": "string", "title": "Property Type" },
+            "listing_price": { "type": "string", "title": "Price" },
+            "sqft": { "type": "string", "title": "Sqft" },
+            "market_status": { "type": "string", "title": "Status" },
+            "locations": { 
+                "type": "array", 
+                "items": { "type": "string" }, 
+                "title": "Locations" 
+            },
+            "companies": { 
+                "type": "array", 
+                "items": { "type": "string" }, 
+                "title": "Companies" 
+            },
+            "category": { "type": "string", "title": "Category" },
+            "data_source_method": { "type": "string", "title": "Scraping Method" }
+        }
+    }
+}
