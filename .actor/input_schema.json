@@ -88,7 +88,6 @@
             "type": "string",
             "editor": "textfield",
             "description": "Trigger background data scraping and DB updates. Type 'true' here to run as admin.",
-            "default": "false",
             "isSecret": true,
             "sectionCaption": "🛠️ System Configuration"
         },
