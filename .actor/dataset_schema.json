@@ -10,6 +10,7 @@
                     "listing_price", 
                     "market_status", 
                     "sentiment", 
+                    "impact_score",
                     "locations", 
                     "title", 
                     "ai_summary", 
@@ -17,7 +18,7 @@
                     "category",
                     "url"
                 ],
-                "flatten": ["locations", "companies", "statistics"]
+                "flatten": ["locations", "entities", "risk_factors"]
             },
             "display": {
                 "component": "table",
@@ -46,6 +47,11 @@
                         "label": "AI Sentiment", 
                         "format": "text",
                         "width": 100
+                    },
+                    "impact_score": {
+                        "label": "Impact",
+                        "format": "number",
+                        "width": 80
                     },
                     "locations": { 
                         "label": "Locations", 
@@ -107,6 +113,23 @@
                 "items": { "type": "string" }, 
                 "title": "Statistics" 
             },
+            "entities": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": { "type": "string" },
+                        "type": { "type": "string" }
+                    }
+                },
+                "title": "Extracted Entities"
+            },
+            "risk_factors": {
+                "type": "array",
+                "items": { "type": "string" },
+                "title": "Market Risks"
+            },
+            "impact_score": { "type": "integer", "minimum": 1, "maximum": 10, "title": "Impact Score" },
             "category": { "type": "string", "title": "Category" },
             "image_url": { "type": "string", "title": "Image URL" },
             "data_source_method": { "type": "string", "title": "Scraping Method" },

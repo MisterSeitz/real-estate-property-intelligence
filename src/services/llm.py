@@ -15,7 +15,10 @@ def analyze_content(text: str, is_test_mode: bool) -> Dict[str, Any]:
             "market_status": "Active",
             "locations": ["New York", "London"],
             "category": "Market Data",
-            "market_dynamic": "High demand, low inventory."
+            "market_dynamic": "High demand, low inventory.",
+            "entities": [{"name": "Compass", "type": "Agency"}, {"name": "Zillow", "type": "Company"}],
+            "risk_factors": ["Interest Rate Hikes"],
+            "impact_score": 8
         }
 
     api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
@@ -42,11 +45,11 @@ def analyze_content(text: str, is_test_mode: bool) -> Dict[str, Any]:
        - listing_price: e.g., "$1.2M", "£500k" (include currency).
        - sqft: Square footage/meters.
        - market_status: e.g., "Active", "Sold", "Foreclosure".
-    6. Entities:
-       - locations: Array of cities, regions, or countries mentioned.
-       - companies: Array of real estate firms or developers mentioned.
-       - statistics: Array of key data points (e.g., "7.5% Yield", "10% YoY growth").
-
+    6. Entities & Intelligence:
+       - entities: A list of objects containing `name` and `type` (e.g., "Company", "Person", "Agency", "Location"). Extract all real estate firms, developers, and key people.
+       - risk_factors: A list of potential risks mentioned (e.g., "High Interest Rates", "Regulatory Changes").
+       - impact_score: An integer from 1 to 10 based on the article's importance to the global/local market.
+    
     Return JSON:
     {{
         "content_type": "...",
@@ -60,6 +63,9 @@ def analyze_content(text: str, is_test_mode: bool) -> Dict[str, Any]:
         "locations": ["..."],
         "companies": ["..."],
         "statistics": ["..."],
+        "entities": [{{ "name": "...", "type": "..." }}],
+        "risk_factors": ["..."],
+        "impact_score": 5,
         "category": "..."
     }}
     """

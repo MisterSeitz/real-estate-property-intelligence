@@ -43,6 +43,12 @@ class DatasetRecord(BaseModel):
     
     category: Optional[str] = None
     image_url: Optional[str] = None
+    
+    # --- ENHANCED INTELLIGENCE ---
+    entities: List[dict] = Field(default_factory=list, description="List of detected entities (Company, Person, etc)")
+    risk_factors: List[str] = Field(default_factory=list, description="Extracted market risk factors")
+    impact_score: int = Field(5, ge=1, le=10, description="Article importance score (1-10)")
+    
     data_source_method: str = Field(..., description="Scraper, Brave_Search, or Fallback")
     raw_context_source: Optional[str] = None
 

@@ -46,7 +46,10 @@ def sync_to_supabase(record: DatasetRecord):
         "statistics": record.statistics,
         "image_url": record.image_url,
         "method": record.data_source_method,
-        "raw_context_source": record.raw_context_source
+        "raw_context_source": record.raw_context_source,
+        "entities": record.entities,
+        "risk_factors": record.risk_factors,
+        "impact_score": record.impact_score
     }
 
     try:
