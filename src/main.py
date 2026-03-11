@@ -108,7 +108,7 @@ async def processor(state: State):
     Actor.log.info(f"Processing {idx+1}: {article.title}")
     
     # Scrape & Analyze
-    content = scrape_article_content(article.url, config.runTestMode)
+    content = await scrape_article_content(article.url, config.runTestMode)
     method = "Direct Scraper"
     if not content or len(content) < 200:
         content = fetch_brave_fallback(article.title, config.runTestMode, config.country)
