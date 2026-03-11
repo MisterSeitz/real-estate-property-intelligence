@@ -208,7 +208,18 @@ async def main():
                     if charge_res and getattr(charge_res, "eventChargeLimitReached", False):
                         await Actor.fail("User charge limit reached.")
                         return
-                await Actor.push_data(res.data)
+                        
+                # Format data to avoid Apify strict schema validation errors
+                output_data = []
+                for row in res.data:
+                    clean_row = {k: v for k, v in row.items() if v is not None}
+                    if "method" in clean_row:
+                        clean_row["data_source_method"] = clean_row.pop("method")
+                    clean_row.pop("id", None)
+                    clean_row.pop("created_at", None)
+                    output_data.append(clean_row)
+                    
+                await Actor.push_data(output_data)
             await Actor.set_status_message(f"Returned {len(res.data) if res.data else 0} articles")
 
 if __name__ == "__main__":
